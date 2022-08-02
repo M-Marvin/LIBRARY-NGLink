@@ -5,18 +5,7 @@ public class NativeNGLink {
 	private static boolean libLoaded = false;
 	
 	static {
-		try {
-			if (NativeExtractor.extractNativeLibs()) {
-				System.loadLibrary("nglink");
-				libLoaded = true;
-			} else {
-				libLoaded = false;
-			}
-		} catch (UnsatisfiedLinkError e) {
-			System.err.println("Failed to load or extract nglink.dll!");
-			e.printStackTrace();
-			libLoaded = false;
-		}
+		libLoaded = NativeExtractor.extractNativeLibs();
 	}
 	
 	public static boolean loadedSuccessfully() {
@@ -37,15 +26,16 @@ public class NativeNGLink {
 	public static record VectorDescription(int number, String name, boolean isReal) {};
 	public static record PlotDescription(String name, String title, String date, String type, int vectorCount, VectorDescription[] vectorInfo) {};
 	
-	public static interface NGCallback {
-		public void log(String s);
-		public void detacheNGSpice();
-		public void reciveVecData(VectorValuesAll vecData, int vectorCount);
-		public void reciveInitData(PlotDescription plotInfo);
+	public static abstract class NGCallback {
+		public abstract void log(String s);
+		public abstract void detacheNGSpice();
+		public abstract void reciveVecData(VectorValuesAll vecData, int vectorCount);
+		public abstract void reciveInitData(PlotDescription plotInfo);
 	}
 	
 	public native int initNGLink(NGCallback callbacks);
 	public native int initNGSPice(String libName);
+	
 	public native int detachNGSpice();
 	public native int execCommand(String command);
 	public native int execList(String commandList);

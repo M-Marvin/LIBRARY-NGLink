@@ -115,7 +115,7 @@ jmethodID javaReceiveVecFuncID;
 jmethodID javaReceiveInitFuncID;
 JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_initNGLink(JNIEnv* env, jobject obj, jobject icallback) {
     
-    jclass callbackClass = env->FindClass("de/m_marvin/nglink/NetiveNGLink$NGCallback");
+    jclass callbackClass = env->FindClass("de/m_marvin/nglink/NativeNGLink$NGCallback");
     if (callbackClass == NULL) {
         logPrinter("JNI-Linking: Failed to find NGCallback class!");
         return 0;
@@ -131,11 +131,11 @@ JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_initNGLink(JNIEnv* 
     if (javaDetacheFuncID == NULL) {
         logPrinter("JNI-Linking: Failed to find detacgeNGSpice callback method!");
     }
-    javaReceiveVecFuncID = env->GetMethodID(callbackClass, "reciveVecData", "()V");
+    javaReceiveVecFuncID = env->GetMethodID(callbackClass, "reciveVecData", "(Lde/m_marvin/nglink/NativeNGLink$VectorValuesAll;I)V");
     if (javaReceiveVecFuncID == NULL) {
         logPrinter("JNI-Linking: Failed to find reciveVecData callback method!");
     }
-    javaReceiveInitFuncID = env->GetMethodID(callbackClass, "reciveInitData", "()V");
+    javaReceiveInitFuncID = env->GetMethodID(callbackClass, "reciveInitData", "(Lde/m_marvin/nglink/NativeNGLink$PlotDescription;)V");
     if (javaReceiveInitFuncID == NULL) {
         logPrinter("JNI-Linking: Failed to find reciveInitData callback method!");
     }
