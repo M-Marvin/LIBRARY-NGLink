@@ -17,10 +17,10 @@ extern "C" {
 
 	/*
 	 * Class:     de_m_marvin_nglink_NativeNGLink
-	 * Method:    initNGSPice
+	 * Method:    initNGSpice
 	 * Signature: (Ljava/lang/String;)I
 	 */
-	JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_initNGSPice
+	JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_initNGSpice
 	(JNIEnv*, jobject, jstring);
 
 	/*
@@ -41,10 +41,10 @@ extern "C" {
 
 	/*
 	 * Class:     de_m_marvin_nglink_NativeNGLink
-	 * Method:    execList
+	 * Method:    loadCircuit
 	 * Signature: (Ljava/lang/String;)I
 	 */
-	JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_execList
+	JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_loadCircuit
 	(JNIEnv*, jobject, jstring);
 
 	/*

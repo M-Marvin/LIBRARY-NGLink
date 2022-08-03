@@ -41,7 +41,7 @@ DLLEXPORT int detachNGSpice();
 // Executes a standard spice command
 DLLEXPORT int execCommand(char* command);
 // Executes a list of commands as if loaded as file
-DLLEXPORT int execList(char* circListString);
+DLLEXPORT int loadCircuit(char* circListString);
 // Checks if spice is running in its background thread
 DLLEXPORT bool isRunning();
 // Lists all aviable plots of the current spice instance

@@ -152,22 +152,22 @@ JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_initNGLink(JNIEnv* 
             javaEnv->CallVoidMethod(javaCallback, javaDetacheFuncID);
         }, 
         [](pvecvaluesall data, int vecCount) {
-            jclass vectorValuesClass = javaEnv->FindClass("de/m_marvin/nglink/NetiveNGLink$VectorValues");
+            jclass vectorValuesClass = javaEnv->FindClass("de/m_marvin/nglink/NativeNGLink$VectorValue");
             if (vectorValuesClass == NULL) {
-                logPrinter("JNI-Linking: Failed to find VectorValues class!");
+                logPrinter("JNI-Linking: Failed to find VectorValue class!");
                 return;
             }
             jmethodID vectorValuesConstructor = javaEnv->GetMethodID(vectorValuesClass, "<init>", "(Ljava/lang/String;DDZZ)V");
             if (vectorValuesConstructor == NULL) {
-                logPrinter("JNI-Linking: Failed to find VectorValues constructor!");
+                logPrinter("JNI-Linking: Failed to find VectorValue constructor!");
                 return;
             }
-            jclass vectorValuesAllClass = javaEnv->FindClass("de/m_marvin/nglink/NetiveNGLink$VectorValuesAll");
+            jclass vectorValuesAllClass = javaEnv->FindClass("de/m_marvin/nglink/NativeNGLink$VectorValuesAll");
             if (vectorValuesAllClass == NULL) {
                 logPrinter("JNI-Linking: Failed to find VectorValuesAll class!");
                 return;
             }
-            jmethodID vectorValuesAllConstructor = javaEnv->GetMethodID(vectorValuesAllClass, "<init>", "(II[Lde/m_marvin/nglink/NativeNGLink$VectorValues;)V");
+            jmethodID vectorValuesAllConstructor = javaEnv->GetMethodID(vectorValuesAllClass, "<init>", "(II[Lde/m_marvin/nglink/NativeNGLink$VectorValue;)V");
             if (vectorValuesAllConstructor == NULL) {
                 logPrinter("JNI-Linking: Failed to find VectorValuesAll constructor!");
                 return;
@@ -198,7 +198,7 @@ JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_initNGLink(JNIEnv* 
             javaEnv->CallVoidMethod(javaCallback, javaReceiveVecFuncID, vectorValuesAll, vecCount);
         },
         [](pvecinfoall data) {
-            jclass plotDescClass = javaEnv->FindClass("de/m_marvin/nglink/NetiveNGLink$PlotDescription");
+            jclass plotDescClass = javaEnv->FindClass("de/m_marvin/nglink/NativeNGLink$PlotDescription");
             if (plotDescClass == NULL) {
                 logPrinter("JNI-Linking: Failed to find PlotDescription class!");
                 return;
@@ -208,12 +208,12 @@ JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_initNGLink(JNIEnv* 
                 logPrinter("JNI-Linking: Failed to find PlotDescription constructor!");
                 return;
             }
-            jclass vectorDescClass = javaEnv->FindClass("de/m_marvin/nglink/NetiveNGLink$VectorDescription");
+            jclass vectorDescClass = javaEnv->FindClass("de/m_marvin/nglink/NativeNGLink$VectorDescription");
             if (vectorDescClass == NULL) {
                 logPrinter("JNI-Linking: Failed to find VectorDescription class!");
                 return;
             }
-            jmethodID vectorDescConstructor = javaEnv->GetMethodID(vectorDescClass, "<init>", "(Ljava/lang/String;DDZZ)V");
+            jmethodID vectorDescConstructor = javaEnv->GetMethodID(vectorDescClass, "<init>", "(ILjava/lang/String;Z)V");
             if (vectorDescConstructor == NULL) {
                 logPrinter("JNI-Linking: Failed to find VectorDescription constructor!");
                 return;
@@ -400,7 +400,7 @@ JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_execCommand(JNIEnv*
 }
 
 /* Executes a list of commands as if loaded as file */
-DLLEXPORT int execList(char* circListString) {
+DLLEXPORT int loadCircuit(char* circListString) {
     int status = checkNGState();
     if (status != 1) return status;
     
@@ -412,9 +412,9 @@ DLLEXPORT int execList(char* circListString) {
     }
     return ngSpiceCirc(commands.data());
 }
-JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_execList(JNIEnv* env, jobject obj, jstring commandList) {
+JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_loadCircuit(JNIEnv* env, jobject obj, jstring commandList) {
     const char* commandListNative = env->GetStringUTFChars(commandList, 0);
-    return execList(const_cast<char*>(commandListNative));
+    return loadCircuit(const_cast<char*>(commandListNative));
 }
 
 /* Checks if ngspice is running in its background thread */
@@ -436,6 +436,7 @@ DLLEXPORT char** listPlots() {
     return ngSpiceListPlots();
 }
 JNIEXPORT jobjectArray JNICALL Java_de_m_1marvin_nglink_NativeNGLink_listPlots(JNIEnv* env, jobject obj) {
+    // TODO Access Violation Error
     return charArrPtrToStringArray(listPlots(), env);
 }
 
@@ -470,42 +471,51 @@ DLLEXPORT pvector_info getVecInfo(char* vecName) {
     
     return ngSpiceGetVectorInfo(vecName);
 }
-JNIEXPORT jobject JNICALL Java_de_m_1marvin_nglink_NativeNGLink_getVecInfo(JNIEnv* env, jobject obj, jstring vecName) {
+JNIEXPORT jobject JNICALL Java_de_m_1marvin_nglink_NativeNGLink_getVec(JNIEnv* env, jobject obj, jstring vecName) {
     const char* vecNameNative = env->GetStringUTFChars(vecName, 0);
     pvector_info vectorNative = getVecInfo(const_cast<char*>(vecNameNative));
 
-    jclass vectorInfoClass = env->FindClass("de/m_marvin/nglink/NativeNGLink");
+    jclass vectorInfoClass = env->FindClass("de/m_marvin/nglink/NativeNGLink$VectorInfo");
     if (vectorInfoClass == NULL) {
         logPrinter("JNI-Linking: Failed to find VectorInfo class!");
         return NULL;
     }
-    jmethodID vectorInfoConstructor = env->GetMethodID(vectorInfoClass, "<init>", "(Ljava/lang/String;IS[DLde/m_marvin/nglink/NativeNGLink$NGComplex;I)V");
+    jmethodID vectorInfoConstructor = env->GetMethodID(vectorInfoClass, "<init>", "(Ljava/lang/String;IS[D[Lde/m_marvin/nglink/NativeNGLink$NGComplex;I)V");
     if (vectorInfoConstructor == NULL) {
         logPrinter("JNI-Linking: Failed to find VectorInfo constructor!");
         return NULL;
     }
-    
-    jobject ngcomplex = NULL;
-    if (vectorNative->v_compdata != NULL) {
-        jclass ngcomplexClass = env->FindClass("de/m_marvin/nglink/NativeNGLink$NGComplex");
-        if (ngcomplexClass == NULL) {
-            logPrinter("JNI-Linking: Failed to find NGComplex class!");
-            return NULL;
-        }
-        jmethodID ngcomplexConstructor = env->GetMethodID(ngcomplexClass, "<init>", "([D[D)V");
-        if (ngcomplexConstructor == NULL) {
-            logPrinter("JNI-Linking: Failed to find NGComplex constructor!");
-            return NULL;
-        }
-        ngcomplex = env->NewObject(ngcomplexClass, ngcomplexConstructor, vectorNative->v_compdata->cx_real, vectorNative->v_compdata->cx_imag);
+    jclass ngcomplexClass = env->FindClass("de/m_marvin/nglink/NativeNGLink$NGComplex");
+    if (ngcomplexClass == NULL) {
+        logPrinter("JNI-Linking: Failed to find NGComplex class!");
+        return NULL;
+    }
+    jmethodID ngcomplexConstructor = env->GetMethodID(ngcomplexClass, "<init>", "(DD)V");
+    if (ngcomplexConstructor == NULL) {
+        logPrinter("JNI-Linking: Failed to find NGComplex constructor!");
+        return NULL;
     }
 
+    jobjectArray ngcomplexArr = NULL;
+    if (vectorNative->v_compdata != NULL) {
+        
+        ngcomplexArr = env->NewObjectArray(vectorNative->v_length, ngcomplexClass, 0);
+        for (int i = 0; i < vectorNative->v_length; i++) {
+            jobject ngcomplex = env->NewObject(ngcomplexClass, ngcomplexConstructor, vectorNative->v_compdata[i].cx_real, vectorNative->v_compdata[i].cx_imag);
+            env->SetObjectArrayElement(ngcomplexArr, i, ngcomplex);
+        }
+
+    }
+
+    jdoubleArray realdataArr = env->NewDoubleArray(vectorNative->v_length);
+    env->SetDoubleArrayRegion(realdataArr, 0, vectorNative->v_length, vectorNative->v_realdata);
+    
     jobject vectorInfo = env->NewObject(vectorInfoClass, vectorInfoConstructor,
         env->NewStringUTF(vectorNative->v_name),
         vectorNative->v_type,
         vectorNative->v_flags,
-        vectorNative->v_realdata,
-        ngcomplex,
+        realdataArr,
+        ngcomplexArr,
         vectorNative->v_length
     );
 
