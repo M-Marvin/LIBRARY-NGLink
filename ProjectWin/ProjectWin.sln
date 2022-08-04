@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.32002.261
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NGLink", "NGLink\NGLink.vcxproj", "{D3F7F824-1FFE-4D3B-B605-E7684A0676DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCS Konsole", "LCS Konsole\LCS Konsole.csproj", "{5FE5B693-EC11-453E-BAF5-65B0E9D2948C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCS Konsole [Debugging]", "LCS Konsole\LCS Konsole [Debugging].csproj", "{5FE5B693-EC11-453E-BAF5-65B0E9D2948C}"
 	ProjectSection(ProjectDependencies) = postProject
 		{D3F7F824-1FFE-4D3B-B605-E7684A0676DD} = {D3F7F824-1FFE-4D3B-B605-E7684A0676DD}
 	EndProjectSection

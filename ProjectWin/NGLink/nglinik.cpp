@@ -16,10 +16,7 @@ This library does mainly 3 thing:
 #include <string>
 #include <vector>
 
-BOOL APIENTRY DllMain( HMODULE hModule,
-                       DWORD  ul_reason_for_call,
-                       LPVOID lpReserved
-                     )
+BOOL APIENTRY DllMain( HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved )
 {
     switch (ul_reason_for_call)
     {
@@ -436,7 +433,6 @@ DLLEXPORT char** listPlots() {
     return ngSpiceListPlots();
 }
 JNIEXPORT jobjectArray JNICALL Java_de_m_1marvin_nglink_NativeNGLink_listPlots(JNIEnv* env, jobject obj) {
-    // TODO Access Violation Error
     return charArrPtrToStringArray(listPlots(), env);
 }
 

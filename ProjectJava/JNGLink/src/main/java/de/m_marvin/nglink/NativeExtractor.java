@@ -53,7 +53,7 @@ public class NativeExtractor {
 			try {
 				outputStream = new FileOutputStream(tempLibFile);
 			} catch (FileNotFoundException e) {
-				return true; // File exists already and i in use
+				return true; // File exists already and is in use
 			}
 			FileInputStream inputStream = new FileInputStream(new File(libUrl.getPath()));
 			outputStream.getChannel().transferFrom(inputStream.getChannel(), 0, inputStream.getChannel().size());

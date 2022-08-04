@@ -77,12 +77,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\NGLink\NGLink.vcxproj">
-      <Project>{d3f7f824-1ffe-4d3b-b605-e7684a0676dd}</Project>
-      <Name>NGLink</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "..\..\ExternalFiles\ngspice36.dll" $(OutDir)</PostBuildEvent>

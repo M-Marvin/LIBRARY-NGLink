@@ -90,13 +90,13 @@ public class JNGLinkTest {
 		
 		// Native FIXME
 		for (String plot : nglink.listPlots()) {
-			System.out.println(plot);
+			System.out.println("PLOTS: " + plot);
 		}
 		
 		System.out.println(nglink.getCurrentPlot());
 		
 		VectorInfo info = nglink.getVec("out");
-		System.out.println(info.name()+ " " + info.length() + " " + info.type() + " " + info.flags());
+		System.out.println("OUT_VEC: " + info.name()+ " " + info.length() + " " + info.type() + " " + info.flags());
 		for (double d : info.realdata()) {
 			System.out.println(d);
 		}
@@ -107,7 +107,7 @@ public class JNGLinkTest {
 		}
 		
 		for (String vec : nglink.getVecs(nglink.getCurrentPlot())) {
-			System.out.println(vec);
+			System.out.println("VECS: " + vec);
 		}
 		
 		System.out.println(nglink.isRunning());
@@ -124,6 +124,8 @@ public class JNGLinkTest {
 		input.close();
 		
 		nglink.detachNGSpice();
+		
+		System.out.println("All methods tested without any exception! :D");
 		
 	}
 	
