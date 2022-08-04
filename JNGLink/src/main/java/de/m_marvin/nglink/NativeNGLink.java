@@ -3,6 +3,23 @@ package de.m_marvin.nglink;
 import java.io.FileNotFoundException;
 
 public class NativeNGLink {
+
+	// Complete vector info, description and values
+	public static record NGComplex(double real, double imag) {};
+	public static record VectorInfo(String name, int type, short flags, double[] realdata, NGComplex[] complexdata, int length) {};
+	// Only vector values, no description of the vector (except for the name)
+	public static record VectorValue(String name, double realdata, double complexdata, boolean isScale, boolean isComplex) {};
+	public static record VectorValuesAll(int count, int index, VectorValue[] values) {};
+	// Only vector description, no values
+	public static record VectorDescription(int number, String name, boolean isReal) {};
+	public static record PlotDescription(String name, String title, String date, String type, int vectorCount, VectorDescription[] vectorInfo) {};
+	
+	public static abstract class NGCallback {
+		public abstract void log(String s);
+		public abstract void detacheNGSpice();
+		public abstract void reciveVecData(VectorValuesAll vecData, int vectorCount);
+		public abstract void reciveInitData(PlotDescription plotInfo);
+	}
 	
 	private static boolean libLoaded = false;
 	
@@ -24,23 +41,6 @@ public class NativeNGLink {
 	
 	public NativeNGLink() {
 		if (!loadedSuccessfully()) throw new IllegalStateException("Native nglink lib is not loaded, mybe a error in the extracting process!");	
-	}
-	
-	// Complete vector info, description and values
-	public static record NGComplex(double real, double imag) {};
-	public static record VectorInfo(String name, int type, short flags, double[] realdata, NGComplex[] complexdata, int length) {};
-	// Only vector values, no description of the vector (except for the name)
-	public static record VectorValue(String name, double realdata, double complexdata, boolean isScale, boolean isComplex) {};
-	public static record VectorValuesAll(int count, int index, VectorValue[] values) {};
-	// Only vector description, no values
-	public static record VectorDescription(int number, String name, boolean isReal) {};
-	public static record PlotDescription(String name, String title, String date, String type, int vectorCount, VectorDescription[] vectorInfo) {};
-	
-	public static abstract class NGCallback {
-		public abstract void log(String s);
-		public abstract void detacheNGSpice();
-		public abstract void reciveVecData(VectorValuesAll vecData, int vectorCount);
-		public abstract void reciveInitData(PlotDescription plotInfo);
 	}
 	
 	public native int initNGLink(NGCallback callbacks);
