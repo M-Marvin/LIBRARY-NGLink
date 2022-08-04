@@ -1,3 +1,0 @@
-https://www.codeproject.com/tips/318140/how-to-make-a-callback-to-csharp-from-c-cplusplus
-
-https://www.codeproject.com/Articles/265903/Using-OpenGL-in-a-WPF-Application
