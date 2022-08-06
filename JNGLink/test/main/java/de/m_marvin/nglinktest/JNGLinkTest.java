@@ -12,6 +12,10 @@ import de.m_marvin.nglink.NativeNGLink.VectorDescription;
 import de.m_marvin.nglink.NativeNGLink.VectorInfo;
 import de.m_marvin.nglink.NativeNGLink.VectorValue;
 import de.m_marvin.nglink.NativeNGLink.VectorValuesAll;
+// Das hier ist absolutes chaos.
+// Nur fuer testzwecke, gehört nicht zur lib.
+// This is a absolute mess, only for testing purpose.
+// Is not part of the lib.
 
 public class JNGLinkTest {
 	
@@ -67,11 +71,11 @@ public class JNGLinkTest {
 			}
 		};
 		
-		System.out.println("TEST " + (nglink.isInitialized() == 0 ? "FALSE" : "TRUE"));
+		System.out.println("TEST " + (!nglink.isInitialized() ? "FALSE" : "TRUE"));
 		
 		nglink.initNGLink(callback);
 		
-		System.out.println("TEST " + (nglink.isInitialized() == 0 ? "FALSE" : "TRUE"));
+		System.out.println("TEST " + (!nglink.isInitialized() ? "FALSE" : "TRUE"));
 		
 		try {
 			nglink.initNGSpice(NativeExtractor.findNative("ngspice"));

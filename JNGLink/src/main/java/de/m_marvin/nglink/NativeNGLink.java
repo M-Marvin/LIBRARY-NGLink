@@ -46,7 +46,7 @@ public class NativeNGLink {
 	public native int initNGLink(NGCallback callbacks);
 	public native int initNGSpice(String libName);
 	
-	public native int isInitialized();
+	public native boolean isInitialized();
 	public native int detachNGSpice();
 	public native int execCommand(String command);
 	public native int loadCircuit(String commandList);
