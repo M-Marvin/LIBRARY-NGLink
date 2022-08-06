@@ -17,11 +17,19 @@ extern "C" {
 
 	/*
 	 * Class:     de_m_marvin_nglink_NativeNGLink
-	 * Method:    initNGSpice
+	 * Method:    isInitialized
 	 * Signature: (Ljava/lang/String;)I
 	 */
 	JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_initNGSpice
 	(JNIEnv*, jobject, jstring);
+
+	/*
+	 * Class:     de_m_marvin_nglink_NativeNGLink
+	 * Method:    initNGSpice
+	 * Signature: ()I
+	 */
+	JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_isInitialized
+	(JNIEnv*, jobject);
 
 	/*
 	 * Class:     de_m_marvin_nglink_NativeNGLink

@@ -249,6 +249,14 @@ JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_initNGLink(JNIEnv* 
 
 }
 
+/* Checks if nglink ist inistialisted */
+DLLEXPORT int isInitialisated() {
+    return initialised;
+}
+JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_isInitialized(JNIEnv*, jobject) {
+    return isInitialisated();
+}
+
 /* Try to load and attach the ngspice lib */
 DLLEXPORT int initNGSpice(const char* libName)
 {

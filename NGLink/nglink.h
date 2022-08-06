@@ -34,6 +34,8 @@ typedef void(_stdcall*ReciveInitDataFunc)(pvecinfoall);
 // Initialise NGLink with all callback functions
 DLLEXPORT int initNGLink(LogFunc printFunc, DetacheFunc detacheFunc);
 DLLEXPORT int initNGLinkFull(LogFunc printFunc, DetacheFunc detacheFunc, ReciveVecDataFunc reciveVecFunc, ReciveInitDataFunc reciveInitFunc);
+// Checks if nglink ist inistialisted
+DLLEXPORT int isInitialisated();
 // Try to load and attach the ngspice lib
 DLLEXPORT int initNGSpice(const char* libName);
 // Detaches the ngspice lib

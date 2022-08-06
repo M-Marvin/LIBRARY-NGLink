@@ -67,7 +67,11 @@ public class JNGLinkTest {
 			}
 		};
 		
+		System.out.println("TEST " + (nglink.isInitialized() == 0 ? "FALSE" : "TRUE"));
+		
 		nglink.initNGLink(callback);
+		
+		System.out.println("TEST " + (nglink.isInitialized() == 0 ? "FALSE" : "TRUE"));
 		
 		try {
 			nglink.initNGSpice(NativeExtractor.findNative("ngspice"));
