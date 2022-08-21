@@ -3,7 +3,7 @@ Helper lib for using ngspice, also makes it compatible with java JNI
 
 This is a simple library for interacting with ngspice36.
 For C++/C#:
-- It provoides currently just allows to attach/detach ngspice and use its methods.
+- It currently just allows to attach/detach ngspice and use its methods.
 - TODO: Some functions to load and auto-reload (if they have ben edited) circuit-files.
 
 For Java:
