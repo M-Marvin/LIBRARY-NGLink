@@ -12,10 +12,13 @@ import java.util.Enumeration;
 import java.util.Scanner;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class NativeExtractor {
 	
 	public static final File NATIVE_TEMP_FOLDER = new File(System.getProperty("java.io.tmpdir"), "jnglink");
+	public static final Pattern JAR_PATH_FILTER = Pattern.compile("#[0-9]*!");
 	
 	public static boolean extractNativeLibs() {
 		
@@ -29,9 +32,10 @@ public class NativeExtractor {
 			boolean failed = false;
 			
 			try {
-
+				
 				String jarLocation = NativeExtractor.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-				if (jarLocation.endsWith("#0!/")) jarLocation = jarLocation.substring(0, jarLocation.length() - 4);
+				Matcher result = JAR_PATH_FILTER.matcher(jarLocation);
+				if (result.find()) jarLocation = result.replaceAll("");
 				if (jarLocation.startsWith("/")) jarLocation = jarLocation.substring(1, jarLocation.length());
 				JarFile libJar = new JarFile(jarLocation);
 				Enumeration<JarEntry> jarEntrys = libJar.entries();
