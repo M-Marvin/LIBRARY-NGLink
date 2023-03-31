@@ -415,6 +415,9 @@ DLLEXPORT int loadCircuit(char* circListString) {
     while ((line = std::strtok(NULL, "\n")) != NULL) {
         commands.push_back(line);
     }
+    if (strcmp(commands.back(), ".end\n") != 0) {
+        commands.push_back(_strdup(".end\n"));
+    }
     return ngSpiceCirc(commands.data());
 }
 JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_loadCircuit(JNIEnv* env, jobject obj, jstring commandList) {
