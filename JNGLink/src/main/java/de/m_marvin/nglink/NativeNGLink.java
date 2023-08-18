@@ -21,7 +21,7 @@ public class NativeNGLink {
 	public static record VectorDescription(int number, String name, boolean isReal) {};
 	public static record PlotDescription(String name, String title, String date, String type, int vectorCount, VectorDescription[] vectorInfo) {};
 	
-	public static abstract class NGCallback {
+	public static interface INGCallback {
 		public abstract void log(String s);
 		public abstract void detacheNGSpice();
 		public abstract void reciveVecData(VectorValuesAll vecData, int vectorCount);
@@ -33,7 +33,7 @@ public class NativeNGLink {
 	
 	private final String spiceLib;
 	private final long classid;
-	private NGCallback callbacks;
+	private INGCallback callbacks;
 	
 	public NativeNGLink(String spiceLib) {
 		this.spiceLib = spiceLib;
@@ -73,8 +73,8 @@ public class NativeNGLink {
 		}
 	}
 	
-	public native int initNGLink(long classid, NGCallback callbacks);
-	public boolean initNGLink(NGCallback callback) {
+	public native int initNGLink(long classid, INGCallback callbacks);
+	public boolean initNGLink(INGCallback callback) {
 		this.callbacks = callback;
 		return classidErrorCodes(initNGLink(classid, callback));
 	}

@@ -3,7 +3,7 @@ package de.m_marvin.nglinktest;
 import java.util.Scanner;
 
 import de.m_marvin.nglink.NativeNGLink;
-import de.m_marvin.nglink.NativeNGLink.NGCallback;
+import de.m_marvin.nglink.NativeNGLink.INGCallback;
 import de.m_marvin.nglink.NativeNGLink.NGComplex;
 import de.m_marvin.nglink.NativeNGLink.PlotDescription;
 import de.m_marvin.nglink.NativeNGLink.VectorDescription;
@@ -19,7 +19,7 @@ public class JNGLinkTest {
 		
 		NativeNGLink nglink = new NativeNGLink();
 		
-		NGCallback callback = new NGCallback() {
+		INGCallback callback = new INGCallback() {
 			
 			@Override
 			public void reciveVecData(VectorValuesAll vecData, int vectorCount) {
