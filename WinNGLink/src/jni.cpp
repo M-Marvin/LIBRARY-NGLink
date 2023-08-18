@@ -35,7 +35,7 @@ JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_initNGLink(JNIEnv* 
 	NGLink* nglink = new NGLink();
 	jclass2cclass[classid] = nglink;
 
-    jclass callbackClass = env->FindClass("de/m_marvin/nglink/NativeNGLink$NGCallback");
+    jclass callbackClass = env->FindClass("de/m_marvin/nglink/NativeNGLink$INGCallback");
     if (callbackClass == NULL) {
         nglink->logPrinter(NG_LINK + "Failed to find NGCallback class!");
         return -3;
