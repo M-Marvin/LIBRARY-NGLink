@@ -1,9 +1,16 @@
 package de.m_marvin.nglink;
 
-import java.io.FileNotFoundException;
-
 public class NativeNGLink {
 
+	private static String ngspiceNativeAutodetect;
+	
+	static {
+		NativeLoader.setTempLibFolder(System.getProperty("java.io.tmpdir") + "/jnglink");
+		NativeLoader.setLibLoadConfig("/libload_nglink.cfg");
+		NativeLoader.loadNative("nglink");
+		ngspiceNativeAutodetect = NativeLoader.getNative("ngspice");
+	}
+	
 	// Complete vector info, description and values
 	public static record NGComplex(double real, double imag) {};
 	public static record VectorInfo(String name, int type, short flags, double[] realdata, NGComplex[] complexdata, int length) {};
@@ -21,40 +28,122 @@ public class NativeNGLink {
 		public abstract void reciveInitData(PlotDescription plotInfo);
 	}
 	
-	private static boolean libLoaded = false;
 	
-	static {
-		try {
-			if (NativeExtractor.extractNativeLibs()) {
-				System.load(NativeExtractor.findNative("nglink"));
-				NativeExtractor.findNative("ngspice"); // Check ngspice lib
-				libLoaded = true;
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
 	
-	public static boolean loadedSuccessfully() {
-		return libLoaded;
+	
+	private final String spiceLib;
+	private final long classid;
+	private NGCallback callbacks;
+	
+	public NativeNGLink(String spiceLib) {
+		this.spiceLib = spiceLib;
+		this.classid = this.hashCode();
 	}
 	
 	public NativeNGLink() {
-		if (!loadedSuccessfully()) throw new IllegalStateException("Native nglink lib is not loaded, mybe a error in the extracting process!");	
+		this(ngspiceNativeAutodetect);
 	}
 	
-	public native int initNGLink(NGCallback callbacks);
-	public native int initNGSpice(String libName);
+	protected void log(String msg) {
+		if (callbacks != null) {
+			callbacks.log("[Java] " + msg);
+		} else {
+			System.out.println("[Java] " + msg);
+		}
+	}
 	
-	public native boolean isInitialized();
-	public native int detachNGSpice();
-	public native int execCommand(String command);
-	public native int loadCircuit(String commandList);
-	public native boolean isRunning();
-	public native String[] listPlots();
-	public native String getCurrentPlot();
-	public native String[] getVecs(String plotName);
-	public native VectorInfo getVec(String vecName);
+	protected boolean classidErrorCodes(int code) {
+		switch (code) {
+		case 1:
+			return true;
+		case 0:
+			return false;
+		case -1:
+			log("Error-Code returned: nglink not initialized or bound!");
+			return false;
+		case -2:
+			log("Error-Code returned: ngspice not initialized or bound!");
+			return false;
+		case -3:
+			log("Error-Code returned: jni-error, c-class not bound!");
+			return false;
+		default:
+			log("Error-Code returned: unknown error!");
+			return false;
+		}
+	}
+	
+	public native int initNGLink(long classid, NGCallback callbacks);
+	public boolean initNGLink(NGCallback callback) {
+		this.callbacks = callback;
+		return classidErrorCodes(initNGLink(classid, callback));
+	}
+	
+	private native int detachNGLink(long classid);
+	public boolean detachNGLink() {
+		return classidErrorCodes(detachNGLink(classid));
+	}
+	
+	private native boolean isInitialized(long classid);
+	public boolean isInitialized() {
+		return isInitialized(classid);
+	}
+	
+	private native int initNGSpice(long classid, String libName);
+	public int initNGSpice(long classid) {
+		return initNGSpice(classid, this.spiceLib);
+	}
+	public boolean initNGSpice() {
+		return classidErrorCodes(initNGSpice(classid));
+	}
+	public boolean initNGSpice(String libName) {
+		return classidErrorCodes(initNGSpice(classid, libName));
+	}
+	
+	private native int detachNGSpice(long classid);
+	public boolean detachNGSpice() {
+		return classidErrorCodes(detachNGLink(classid));
+	}
+	
+	private native boolean isNGSpiceAttached(long classid);
+	public boolean isNGSpiceAttached() {
+		return isNGSpiceAttached(classid);
+	}
+		
+	private native int execCommand(long classid, String command);
+	public boolean execCommand(String command) {
+		return classidErrorCodes(execCommand(classid, command));
+	}
+	
+	private native int loadCircuit(long classid, String commandList);
+	public boolean loadCircuit(String commandLiString) {
+		return classidErrorCodes(loadCircuit(classid, commandLiString));
+	}
+	
+	private native boolean isRunning(long classid);
+	public boolean isRunning() {
+		return isRunning(classid);
+	}
+	
+	private native String[] listPlots(long classid);
+	public String[] listPlots() {
+		return listPlots(classid);
+	}
+	
+	private native String getCurrentPlot(long classid);
+	public String getCurrentPlot() {
+		return getCurrentPlot(classid);
+	}
+	
+	private native String[] getVecs(long classid, String plotName);
+	public String[] getVecs(String plotName) {
+		return getVecs(classid, plotName);
+	}
+	
+	private native VectorInfo getVec(long classid, String vecName);
+	public VectorInfo getVec(String vecName) {
+		return getVec(classid, vecName);
+	}
 	
 }
 
