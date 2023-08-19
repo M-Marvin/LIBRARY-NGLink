@@ -247,6 +247,8 @@ JNIEXPORT jstring JNICALL Java_de_m_1marvin_nglink_NativeNGLink_getCurrentPlot(J
 JNIEXPORT jobjectArray JNICALL Java_de_m_1marvin_nglink_NativeNGLink_getVecs(JNIEnv* env, jobject obj, jlong classid, jstring plotName) {
 	NGLink* nglink = (NGLink*) jclass2cclass[classid];
     if (nglink == NULL) return NULL;
+
+    if (plotName == NULL) return NULL;
     const char* plotNameNative = env->GetStringUTFChars(plotName, 0);
     char** vecNamesNative = nglink->listVecs(const_cast<char*>(plotNameNative));
     return vecNamesNative == NULL ? NULL : charArrPtrToStringArray(vecNamesNative, env);
@@ -256,8 +258,11 @@ JNIEXPORT jobject JNICALL Java_de_m_1marvin_nglink_NativeNGLink_getVec(JNIEnv* e
 	NGLink* nglink = (NGLink*) jclass2cclass[classid];
     if (nglink == NULL) return NULL;
 
+    if (vecName == NULL) return NULL;
     const char* vecNameNative = env->GetStringUTFChars(vecName, 0);
     pvector_info vectorNative = nglink->getVecInfo(const_cast<char*>(vecNameNative));
+
+    if (vectorNative == NULL) return NULL;
 
     jclass vectorInfoClass = env->FindClass("de/m_marvin/nglink/NativeNGLink$VectorInfo");
     if (vectorInfoClass == NULL) {

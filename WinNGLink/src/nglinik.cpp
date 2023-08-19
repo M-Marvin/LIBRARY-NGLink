@@ -164,8 +164,13 @@ int NGLink::initNGSpice(const char* libName)
 				NULL, this
 			);
 
-			logPrinter(NG_LINK + "ngspice attached!"); // TODO status check
-			return status;
+			if (status == 0)
+			{
+				logPrinter(NG_LINK + "ngspice attached!");
+				return 1;
+			}
+			logPrinter(NG_LINK + "failed to attach ngspice!");
+			return 0;
 		}
 	}
 	else
@@ -220,7 +225,7 @@ int NGLink::execCommand(char* command) {
 	int status = checkNGState();
 	if (status != 1) return status;
 
-	return ngSpiceCommand(command);
+	return ngSpiceCommand(command) == 0 ? 1 : 0;
 }
 
 /* Executes a list of commands as if loaded as file */
@@ -237,7 +242,7 @@ int NGLink::loadCircuit(char* circListString) {
 	if (strcmp(commands.back(), ".end\n") != 0) {
 		commands.push_back(_strdup(".end\n"));
 	}
-	return ngSpiceCirc(commands.data());
+	return ngSpiceCirc(commands.data()) == 0 ? 1 : 0;
 }
 
 /* Checks if ngspice is running in its background thread */
