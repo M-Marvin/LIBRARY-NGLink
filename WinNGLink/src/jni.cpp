@@ -2,6 +2,7 @@
 #include "nglink.h"
 #include "de_m_marvin_nglink_NativeNGLink.h"
 #include <map>
+#include <mutex>
 
 /* Helper methods to convert to JNI values */
 #define JSTRING env->FindClass("java/lang/String")
@@ -23,8 +24,11 @@ jobjectArray charArrPtrToStringArray(char** charArrPtr, JNIEnv* env) {
 /* End of helper methods */
 
 static std::map<jlong, void*> jclass2cclass;
+static std::mutex mapMutex;
 
 JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_initNGLink(JNIEnv* env, jobject obj, jlong classid, jobject icallback) {
+
+	std::unique_lock<std::mutex> lck (mapMutex);
 
 	if (jclass2cclass[classid] != NULL) {
 		NGLink* nglink = (NGLink*) jclass2cclass[classid];
@@ -173,6 +177,9 @@ JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_initNGLink(JNIEnv* 
 }
 
 JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_detachNGLink(JNIEnv* env, jobject obj, jlong classid) {
+
+	std::unique_lock<std::mutex> lck (mapMutex);
+
 	NGLink* nglink = (NGLink*) jclass2cclass[classid];
 	if (nglink == NULL) return -3;
 	if (nglink->isNGSpiceAttached()) {
@@ -185,12 +192,18 @@ JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_detachNGLink(JNIEnv
 }
 
 JNIEXPORT jboolean JNICALL Java_de_m_1marvin_nglink_NativeNGLink_isInitialized(JNIEnv* env, jobject obj, jlong classid) {
+
+	std::unique_lock<std::mutex> lck (mapMutex);
+
 	NGLink* nglink = (NGLink*) jclass2cclass[classid];
     if (nglink == NULL) return false;
     return nglink->isInitialisated() == 1;
 }
 
 JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_initNGSpice(JNIEnv* env, jobject obj, jlong classid, jstring libName) {
+
+	std::unique_lock<std::mutex> lck (mapMutex);
+
 	NGLink* nglink = (NGLink*) jclass2cclass[classid];
     if (nglink == NULL) return -3;
 	if (libName == NULL) return 0;
@@ -198,18 +211,27 @@ JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_initNGSpice(JNIEnv*
 }
 
 JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_detachNGSpice(JNIEnv* env, jobject obj, jlong classid) {
+
+	std::unique_lock<std::mutex> lck (mapMutex);
+
 	NGLink* nglink = (NGLink*) jclass2cclass[classid];
     if (nglink == NULL) return -3;
     return nglink->detachNGSpice();
 }
 
 jboolean Java_de_m_1marvin_nglink_NativeNGLink_isNGSpiceAttached(JNIEnv* env, jobject obj, jlong classid) {
+
+	std::unique_lock<std::mutex> lck (mapMutex);
+
 	NGLink* nglink = (NGLink*) jclass2cclass[classid];
 	if (nglink == NULL) return false;
 	return nglink->isNGSpiceAttached();
 }
 
 JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_execCommand(JNIEnv* env, jobject obj, jlong classid, jstring command) {
+
+	std::unique_lock<std::mutex> lck (mapMutex);
+
 	NGLink* nglink = (NGLink*) jclass2cclass[classid];
     if (nglink == NULL) return -3;
     const char* commandNative = env->GetStringUTFChars(command, 0);
@@ -217,6 +239,9 @@ JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_execCommand(JNIEnv*
 }
 
 JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_loadCircuit(JNIEnv* env, jobject obj, jlong classid, jstring commandList) {
+
+	std::unique_lock<std::mutex> lck (mapMutex);
+
 	NGLink* nglink = (NGLink*) jclass2cclass[classid];
     if (nglink == NULL) return -3;
     if (commandList == NULL) return 0;
@@ -225,12 +250,18 @@ JNIEXPORT jint JNICALL Java_de_m_1marvin_nglink_NativeNGLink_loadCircuit(JNIEnv*
 }
 
 JNIEXPORT jboolean JNICALL Java_de_m_1marvin_nglink_NativeNGLink_isRunning(JNIEnv* env, jobject obj, jlong classid) {
+
+	std::unique_lock<std::mutex> lck (mapMutex);
+
 	NGLink* nglink = (NGLink*) jclass2cclass[classid];
     if (nglink == NULL) return false;
     return nglink->isRunning();
 }
 
 JNIEXPORT jobjectArray JNICALL Java_de_m_1marvin_nglink_NativeNGLink_listPlots(JNIEnv* env, jobject obj, jlong classid) {
+
+	std::unique_lock<std::mutex> lck (mapMutex);
+
 	NGLink* nglink = (NGLink*) jclass2cclass[classid];
     if (nglink == NULL) return NULL;
 	char** plots = nglink->listPlots();
@@ -238,6 +269,9 @@ JNIEXPORT jobjectArray JNICALL Java_de_m_1marvin_nglink_NativeNGLink_listPlots(J
 }
 
 JNIEXPORT jstring JNICALL Java_de_m_1marvin_nglink_NativeNGLink_getCurrentPlot(JNIEnv* env, jobject obj, jlong classid) {
+
+	std::unique_lock<std::mutex> lck (mapMutex);
+
 	NGLink* nglink = (NGLink*) jclass2cclass[classid];
     if (nglink == NULL) return NULL;
 	char* plot = nglink->getCurrentPlot();
@@ -245,6 +279,9 @@ JNIEXPORT jstring JNICALL Java_de_m_1marvin_nglink_NativeNGLink_getCurrentPlot(J
 }
 
 JNIEXPORT jobjectArray JNICALL Java_de_m_1marvin_nglink_NativeNGLink_getVecs(JNIEnv* env, jobject obj, jlong classid, jstring plotName) {
+
+	std::unique_lock<std::mutex> lck (mapMutex);
+
 	NGLink* nglink = (NGLink*) jclass2cclass[classid];
     if (nglink == NULL) return NULL;
 
@@ -255,6 +292,9 @@ JNIEXPORT jobjectArray JNICALL Java_de_m_1marvin_nglink_NativeNGLink_getVecs(JNI
 }
 
 JNIEXPORT jobject JNICALL Java_de_m_1marvin_nglink_NativeNGLink_getVec(JNIEnv* env, jobject obj, jlong classid, jstring vecName) {
+
+	std::unique_lock<std::mutex> lck (mapMutex);
+
 	NGLink* nglink = (NGLink*) jclass2cclass[classid];
     if (nglink == NULL) return NULL;
 

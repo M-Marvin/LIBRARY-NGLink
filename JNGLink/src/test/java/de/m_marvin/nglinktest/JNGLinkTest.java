@@ -17,6 +17,30 @@ public class JNGLinkTest {
 	
 	public static void main(String... args) throws InterruptedException {
 		
+		Thread t1 = new Thread(() -> {
+			try {
+				test();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
+		Thread t2 = new Thread(() -> {
+			try {
+				test();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
+		
+		t1.start();
+		//Thread.sleep(100);
+		t2.start();
+	}
+	
+	public static void test() throws InterruptedException {
+
 		NativeNGLink nglink = new NativeNGLink();
 		
 		INGCallback callback = new INGCallback() {
@@ -152,6 +176,10 @@ public class JNGLinkTest {
 		input.close();
 		
 		nglink.detachNGSpice();
+		
+		
+		
+		
 		
 		System.out.println("All methods tested without any exception! :D");
 		
