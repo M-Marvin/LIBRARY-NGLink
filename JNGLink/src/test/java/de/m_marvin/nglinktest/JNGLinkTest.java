@@ -129,11 +129,11 @@ public class JNGLinkTest {
 		Scanner input = new Scanner(System.in);
 
 		nglink.loadCircuit("test circuit\r\n"
-				+ "V1 in gnd 10\r\n"
-				+ "R1 in out 1k\r\n"
-				+ "R2 out gnd 1k\r\n"
-				+ ".end\r\n"
-				+ ".tran 1 10\r\n"
+				+ "V1 in gnd 10\n"
+				+ "R1 in out 1k\n"
+				+ "R2 out gnd 1k\n"
+				+ ".end\n"
+				+ ".tran 1 10\n"
 				+ "");
 		
 		NativeNGLink nglink2 = nglink; // new NativeNGLink();
