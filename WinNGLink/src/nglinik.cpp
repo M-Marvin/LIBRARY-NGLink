@@ -136,17 +136,18 @@ int NGLink::initNGSpice(const char* libName)
 				},
 				[](int exitStatus, NG_BOOL detachDll, NG_BOOL normalExit, int id, void* caller) -> int {
 					NGLink* nglink = (NGLink*) caller;
-					if (detachDll)
-					{
-						nglink->logPrinter(NG_LINK + "ngspice wants to detache by itself!");
-					}
-					else if (!normalExit)
+					if (!normalExit)
 					{
 						nglink->logPrinter(NG_LINK + "crash of ngspice simmulator, awaiting detaching!");
 					}
 					else
 					{
-						nglink->logPrinter(NG_LINK + "ngspice wants to quit, awaiting detaching!");
+						nglink->logPrinter(NG_LINK + "ngspice wants to quit, detaching!");
+					}
+					if (detachDll)
+					{
+						nglink->logPrinter(NG_LINK + "detaching ngspice ...");
+						nglink->detachNGSpice();
 					}
 					nglink->detachCallback();
 					return 1;

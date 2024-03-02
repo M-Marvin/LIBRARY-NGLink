@@ -11,9 +11,9 @@ targetCompatibility = 17
 // Add additional content to the manifest
 tasks.named('jar') {
     manifest {
-        attributes('Implementation-Title': project.name,
-                   'Implementation-Version': version,
-                   'Author': 'M_Marvin')
+        attributes('Implementation-Version': version,
+                   'Implementation-Title': project.name,
+                   'Implementation-Vendor-Id': 'de.m_marvin')
     }
 }
 

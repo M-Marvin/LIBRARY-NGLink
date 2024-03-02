@@ -82,20 +82,22 @@ public class JNGLinkTest {
 			
 			@Override
 			public void detacheNGSpice() {
-				System.out.println("Detache NGSpice");
+				System.out.println("NGSpice Detached");
 				//nglink.detachNGSpice();
 			}
 		};
 
 		nglik.initNGLink(callback);
 		
-		try {
-			//CompletableFuture.runAsync(() -> test1(nglik)).get();
-			CompletableFuture.runAsync(() -> test1(nglik)).get();
-		} catch (InterruptedException | ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		test1(nglik);
+		
+//		try {
+//			//CompletableFuture.runAsync(() -> test1(nglik)).get();
+//			CompletableFuture.runAsync(() -> test1(nglik)).get();
+//		} catch (InterruptedException | ExecutionException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 	}
 	
