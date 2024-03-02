@@ -141,8 +141,9 @@ public class JNGLinkTest {
 			}
 			
 			System.out.println(nglink.isRunning());
-
-			nglink.detachNGSpice();
+			
+			nglink.execCommand("quit");
+//			nglink.detachNGSpice();
 			
 		}
 	}

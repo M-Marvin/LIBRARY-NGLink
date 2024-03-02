@@ -138,16 +138,27 @@ int NGLink::initNGSpice(const char* libName)
 					NGLink* nglink = (NGLink*) caller;
 					if (!normalExit)
 					{
-						nglink->logPrinter(NG_LINK + "crash of ngspice simmulator, awaiting detaching!");
+						nglink->logPrinter(NG_LINK + "crash of ngspice simmulator!");
 					}
 					else
 					{
-						nglink->logPrinter(NG_LINK + "ngspice wants to quit, detaching!");
+						nglink->logPrinter(NG_LINK + "ngspice wants to quit!");
 					}
 					if (detachDll)
 					{
 						nglink->logPrinter(NG_LINK + "detaching ngspice ...");
 						nglink->detachNGSpice();
+					} else {
+						nglink->ngSpiceModule = NULL;
+						nglink->ngSpiceInit = NULL;
+						nglink->ngSpiceCommand = NULL;
+						nglink->ngSpiceCirc = NULL;
+						nglink->ngSpiceRunning = NULL;
+						nglink->ngSpiceGetVectorInfo = NULL;
+						nglink->ngSpiceGetCurPlot = NULL;
+						nglink->ngSpiceListPlots = NULL;
+						nglink->ngSpiceListVectors = NULL;
+						nglink->logPrinter(NG_LINK + "ngspice detaching by itself!");
 					}
 					nglink->detachCallback();
 					return 1;
