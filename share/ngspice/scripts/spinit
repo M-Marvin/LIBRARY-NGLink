@@ -1,0 +1,18 @@
+* Modified ngspice init file
+alias exit quit
+alias acct rusage all
+set ngbehavior=all
+
+unset interactive
+unset moremode
+
+if $?xspice_enabled
+
+ codemodel ../share/spice/spice2poly.cm
+ codemodel ../share/spice/analog.cm
+ codemodel ../share/spice/digital.cm
+ codemodel ../share/spice/xtradev.cm
+ codemodel ../share/spice/xtraevt.cm
+ codemodel ../share/spice/table.cm
+
+end
